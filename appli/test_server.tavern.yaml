@@ -1,0 +1,76 @@
+# py -m pytest .\test_server.tavern.yaml
+---
+test_name: My beers
+stages:
+  - name: add Beer
+    request:
+      url: http://localhost:5000/addBeer
+      json:
+        beer: DK
+        quantity: 2
+        typeBeer: blonde
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code:
+        - 200
+        - 201
+      body:
+        $ext:
+          function: utils:add_Beer
+  - name: Get list beers
+    request:
+      url: http://localhost:5000/list
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+      body:
+        $ext:
+          function: tavern.testutils.helpers:validate_content
+          extra_kwargs:
+            comparisons:
+              - jmespath: "[0].beer"
+                operator: "eq"
+                expected: "Paix Dieux"
+              - jmespath: "[1].beer"
+                operator: "eq"
+                expected: "Chimay"
+  - name: Get a type of beer
+    request:
+      url: http://localhost:5000/list?beerChoose=DK
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+      save:
+        body: 
+          beerselect: "0"
+  - name: Get a type of beer error
+    request:
+      url: http://localhost:5000/list?beerChoose=toto
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+  - name: drink Beer
+    request:
+      url: http://localhost:5000/drinkBeer
+      json:
+        beer: "{beerselect.beer}"
+        quantity: "{beerselect.quantity}"
+        #quantity: "10"
+        typeBeer: "{beerselect.typeBeer}"
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code:
+        - 401
+      body:
+        $ext:
+          function: utils:drink_Beer

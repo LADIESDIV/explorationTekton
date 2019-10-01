@@ -1,0 +1,95 @@
+---
+version: 1
+
+formatters:
+    tavern_core_format:
+        (): colorlog.ColoredFormatter
+        format: "%(asctime)s [%(bold)s%(log_color)s%(levelname)s%(reset)s]: (%(bold)s%(name)s:%(lineno)d%(reset)s) %(message_log_color)s%(message)s"
+        style: "%"
+        datefmt: "%X"
+        log_colors:
+            DEBUG:    cyan
+            INFO:     green
+            WARNING:  yellow
+            ERROR:    red
+            CRITICAL: red,bg_white
+        secondary_log_colors:
+          message:
+            INFO: bold_white,bg_yellow
+    tavern_response_format:
+        (): colorlog.ColoredFormatter
+        format: "%(asctime)s [%(bold)s%(log_color)s%(levelname)s%(reset)s]: (%(bold)s%(name)s:%(lineno)d%(reset)s) %(message_log_color)s%(message)s"
+        style: "%"
+        datefmt: "%X"
+        log_colors:
+            DEBUG:    cyan
+            INFO:     green
+            WARNING:  yellow
+            ERROR:    red
+            CRITICAL: red,bg_white
+        secondary_log_colors:
+          message:
+            INFO: yellow
+    tavern_request_format:
+        (): colorlog.ColoredFormatter
+        format: "%(asctime)s [%(bold)s%(log_color)s%(levelname)s%(reset)s]: (%(bold)s%(name)s:%(lineno)d%(reset)s) %(message_log_color)s%(message)s"
+        style: "%"
+        datefmt: "%X"
+        log_colors:
+            DEBUG:    cyan
+            INFO:     green
+            WARNING:  yellow
+            ERROR:    red
+            CRITICAL: red,bg_white
+        secondary_log_colors:
+          message:
+            DEBUG: blue
+    conftest_format:
+        (): colorlog.ColoredFormatter
+        format: "%(asctime)s [%(bold)s%(log_color)s%(levelname)s%(reset)s]: (%(bold)s%(name)s:%(lineno)d%(reset)s) %(message_log_color)s%(message)s"
+        style: "%"
+        datefmt: "%X"
+        log_colors:
+            DEBUG:    cyan
+            INFO:     green
+            WARNING:  yellow
+            ERROR:    red
+            CRITICAL: red,bg_white
+        secondary_log_colors:
+          message:
+            INFO: bold_purple
+            DEBUG: purple
+
+
+handlers:
+    tavern_core_handler:
+        class: colorlog.StreamHandler
+        formatter: tavern_core_format
+    tavern_response_handler:
+        class: colorlog.StreamHandler
+        formatter: tavern_response_format
+    tavern_resquest_handler:
+        class: colorlog.StreamHandler
+        formatter: tavern_request_format
+    conftest_format:
+        class: colorlog.StreamHandler
+        formatter: conftest_format
+
+
+loggers:
+    tavern.core:
+        handlers:
+            - tavern_core_handler
+        level: DEBUG
+    tavern._plugins.rest.response:
+        handlers:
+            - tavern_response_handler
+        level: DEBUG
+    conftest:
+        handlers:
+            - conftest_format
+        level: DEBUG
+    tavern._plugins.rest.request:
+        handlers:
+            - tavern_resquest_handler
+        level: DEBUG
