@@ -6,3 +6,5 @@ appli/__pycache__
 appli/.pytest_cache
 appli/addBeer.json
 appli/drinkBeer.json
+appli/conftest.py
+appli/log_spec.yaml

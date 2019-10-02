@@ -1,36 +1,22 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: skaffold-git
+  name: git-repo
+  #namespace: tekton-pipelines
 spec:
   type: git
   params:
-  - name: revision
-    value: master
-  - name: url
-    value: https://github.com/GoogleContainerTools/skaffold
-
-
+    - name: revision
+      value: master
+    - name: url
+      value: https://github.com/LADIESDIV/explorationTekton.git
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: wizzbang-pr
-  namespace: default
+  name: image
 spec:
-  type: pullRequest
+  type: image
   params:
     - name: url
-      value: https://github.com/wizzbangcorp/wizzbang/pulls/1
-  secrets:
-    - fieldName: githubToken
-      secretName: github-secrets
-      secretKey: token
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: github-secrets
-type: Opaque
-data:
-  token: github_personal_access_token_secret # in base64 encoded form
+      value: gcr.io/grounded-braid-232514/listbeer

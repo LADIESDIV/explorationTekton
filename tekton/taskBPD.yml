@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: build-push-image
+  #namespace: tekton-pipelines
+spec:
+  inputs:
+    resources:
+      - name: git-repo
+        type: git
+    params:
+      - name: pathToContext
+        type: string
+        description: The path to the build context, used by Kaniko - within the workspace
+        default: /workspace/git-repo/appli
+      - name: pathToDockerFile
+        type: string
+        description: The path to the dockerfile to build (relative to the context)
+        default: /workspace/git-repo/appli/Dockerfile
+        #value: appli/Dockerfile
+  outputs:
+    resources:
+      - name: builtImage
+        type: image
+  steps:
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor:v0.9.0
+      env:
+        - name: "DOCKER_CONFIG"
+          value: "/builder/home/.docker/"
+      command:
+        - /kaniko/executor
+      args:
+        #- --dockerfile=${inputs.params.pathToDockerFile}
+        #- --destination=${outputs.resources.builtImage.url}
+        #- --context=${inputs.params.pathToContext}
+        - --dockerfile=Dockerfile
+        - --destination=gcr.io/grounded-braid-232514/list-beer
+        - --context=/workspace/git-repo/appli
+        - --verbosity=debug

@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: build-and-deploy-pipeline
+  #namespace: tekton-pipelines
+spec:
+  resources:
+    - name: git-repo
+      type: git
+    - name: web-image
+      type: image
+  tasks:
+    - name: source-to-image
+      taskRef:
+        name: build-push-image
+      params:
+        - name: pathToContext
+          value: /workspace/git-repo/appli
+        - name: pathToDockerFile
+          value: Dockerfile
+      resources:
+        inputs:
+          - name: git-repo
+            resource: git-repo
+        outputs:
+          - name: builtImage
+            resource: web-image
+    - name: deploy-to-cluster
+      taskRef:
+        name: deploy-using-kubectl
+      runAfter:
+        - source-to-image
+      resources:
+        inputs:
+          - name: git-repo
+            resource: git-repo
+          - name: image
+            resource: web-image
+            from:
+              - source-to-image
+      params:
+        - name: pathToYamlFile
+          value: "tekton/listbeer.yml"
+    - name: test-app
+      taskRef:
+        name: test-app
+      runAfter:
+        - deploy-to-cluster
+      resources:
+        inputs:
+          - name: git-repo
+            resource: git-repo
+      params:
+        - name: pathToYamlFileTest
+          value: "appli/test_server.tavern.yaml"
+        - name: appliUrl
+          value: list-beer.default.svc.cluster.local

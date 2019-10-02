@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: test-app
+  #namespace: tekton-pipelines
+spec:
+  inputs:
+    resources:
+      - name: git-repo
+        type: git
+    params:
+      - name: pathToYamlFileTest
+        description: The path to the yaml file to deploy within the git source
+        type: string
+        #value: appli/test_server.tavern.yaml
+      - name: appliUrl
+        description: The path to the yaml file to deploy within the git source
+        type: string
+  steps:
+    - name: update-yaml
+      image: alpine
+      command: ["sed"]
+      args:
+        - "-i"
+        - "-e"
+        #- "s;__IMAGE__;${inputs.param.appliUrl};g"
+        - "s;localhost;list-beer.default.svc.cluster.local;g"
+        #- "/workspace/git-repo/${inputs.params.pathToYamlFile}"
+        - "/workspace/git-repo/appli/test_server.tavern.yaml"
+    - name: test-tavern
+      image: nzad/tavern
+      command: ["python"]
+      args:
+        - "-m"
+        - "pytest"
+        - "/workspace/git-repo/appli/test_server.tavern.yaml"
