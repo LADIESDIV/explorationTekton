@@ -13,3 +13,14 @@ spec:
     - name: web-image
       resourceRef:
         name: image
+  params:
+    - name: pathToYamlFileTest
+      value: "appli/test_server.tavern.yaml"
+    - name: appliUrl
+      value: "list-beer.default.svc.cluster.local"
+    - name: pathToYamlFile
+      value: "tekton/listbeer.yml"
+    - name: pathToContext
+      value: "/workspace/git-repo/appli"
+    - name: pathToDockerFile
+      value: "Dockerfile"

@@ -17,7 +17,6 @@ spec:
         type: string
         description: The path to the dockerfile to build (relative to the context)
         default: /workspace/git-repo/appli/Dockerfile
-        #value: appli/Dockerfile
   outputs:
     resources:
       - name: builtImage

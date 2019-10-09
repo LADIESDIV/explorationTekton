@@ -8,3 +8,5 @@ appli/addBeer.json
 appli/drinkBeer.json
 appli/conftest.py
 appli/log_spec.yaml
+__pycache__
+log_spec.yaml

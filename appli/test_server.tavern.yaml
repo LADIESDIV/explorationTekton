@@ -18,7 +18,7 @@ stages:
         - 201
       body:
         $ext:
-          function: utils:add_Beer
+          function: appli.utils:add_Beer
   - name: Get list beers
     request:
       url: http://localhost:5000/list
@@ -47,7 +47,7 @@ stages:
     response:
       status_code: 200
       save:
-        body: 
+        body:
           beerselect: "0"
   - name: Get a type of beer error
     request:
@@ -73,4 +73,4 @@ stages:
         - 401
       body:
         $ext:
-          function: utils:drink_Beer
+          function: appli.utils:drink_Beer

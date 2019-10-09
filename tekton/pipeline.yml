@@ -15,9 +15,9 @@ spec:
         name: build-push-image
       params:
         - name: pathToContext
-          value: /workspace/git-repo/appli
+          value: "${params.pathToContext}"
         - name: pathToDockerFile
-          value: Dockerfile
+          value: "${params.pathToDockerFile}"
       resources:
         inputs:
           - name: git-repo
@@ -40,7 +40,7 @@ spec:
               - source-to-image
       params:
         - name: pathToYamlFile
-          value: "tekton/listbeer.yml"
+          value: "${params.pathToYamlFile}"
     - name: test-app
       taskRef:
         name: test-app
@@ -52,6 +52,6 @@ spec:
             resource: git-repo
       params:
         - name: pathToYamlFileTest
-          value: "appli/test_server.tavern.yaml"
+          value: "${params.pathToYamlFileTest}"
         - name: appliUrl
-          value: list-beer.default.svc.cluster.local
+          value: "${params.appliUrl}"
