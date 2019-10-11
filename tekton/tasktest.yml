@@ -20,17 +20,20 @@ spec:
     - name: update-yaml
       image: alpine
       command: ["sed"]
-      args:
-        - "-i"
-        - "-e"
-        #- "s;__IMAGE__;${inputs.param.appliUrl};g"
-        - "s;localhost;list-beer.default.svc.cluster.local;g"
-        #- "/workspace/git-repo/${inputs.params.pathToYamlFile}"
-        - "/workspace/git-repo/appli/test_server.tavern.yaml"
+      args: [
+          "-i",
+          "-e",
+          "s;localhost;$(inputs.params.appliUrl);g",
+          #"s;localhost;list-beer.default.svc.cluster.local;g",
+          "/workspace/git-repo/$(inputs.params.pathToYamlFileTest)",
+        ]
+    #"/workspace/git-repo/appli/test_server.tavern.yaml",
     - name: test-tavern
       image: nzad/tavern
       command: ["python"]
       args:
-        - "-m"
-        - "pytest"
-        - "/workspace/git-repo/appli/test_server.tavern.yaml"
+        [
+          "-m",
+          "pytest",
+          "/workspace/git-repo/$(inputs.params.pathToYamlFileTest)",
+        ]

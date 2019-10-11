@@ -16,7 +16,7 @@ spec:
       - name: pathToDockerFile
         type: string
         description: The path to the dockerfile to build (relative to the context)
-        default: /workspace/git-repo/appli/Dockerfile
+        default: Dockerfile
   outputs:
     resources:
       - name: builtImage
@@ -27,13 +27,10 @@ spec:
       env:
         - name: "DOCKER_CONFIG"
           value: "/builder/home/.docker/"
-      command:
-        - /kaniko/executor
+      command: ["/kaniko/executor"]
       args:
-        #- --dockerfile=${inputs.params.pathToDockerFile}
-        #- --destination=${outputs.resources.builtImage.url}
-        #- --context=${inputs.params.pathToContext}
-        - --dockerfile=Dockerfile
-        - --destination=gcr.io/grounded-braid-232514/list-beer
-        - --context=/workspace/git-repo/appli
-        - --verbosity=debug
+        [
+          "--dockerfile=$(inputs.params.pathToDockerFile)",
+          "--destination=$(outputs.resources.builtImage.url)",
+          "--context=$(inputs.params.pathToContext)",
+        ]

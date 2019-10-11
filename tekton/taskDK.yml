@@ -19,17 +19,16 @@ spec:
     - name: update-yaml
       image: alpine
       command: ["sed"]
-      args:
-        - "-i"
-        - "-e"
-        #- "s;__IMAGE__;${inputs.resources.image.url};g"
-        - "s;__IMAGE__;gcr.io/grounded-braid-232514/list-beer;g"
-        #- "/workspace/git-repo/${inputs.params.pathToYamlFile}"
-        - "/workspace/git-repo/tekton/listbeer.yml"
+      args: [
+          "-i",
+          "-e",
+          "s;__IMAGE__;$(inputs.resources.image.url);g",
+          # "s;__IMAGE__;gcr.io/grounded-braid-232514/list-beer;g",
+          "/workspace/git-repo/$(inputs.params.pathToYamlFile)",
+        ]
+    # "/workspace/git-repo/tekton/listbeer.yml",
     - name: run-kubectl
       image: lachlanevenson/k8s-kubectl
       command: ["kubectl"]
       args:
-        - "apply"
-        - "-f"
-        - "/workspace/git-repo/tekton/listbeer.yml"
+        ["apply", "-f", "/workspace/git-repo/$(inputs.params.pathToYamlFile)"]

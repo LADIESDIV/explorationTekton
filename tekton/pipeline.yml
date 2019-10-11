@@ -9,15 +9,34 @@ spec:
       type: git
     - name: web-image
       type: image
+  params:
+    - name: pathToContext
+      type: string
+      description: The path to the build context, used by Kaniko - within the workspace
+      default: /workspace/git-repo/appli
+    - name: pathToDockerFile
+      type: string
+      description: The path to the dockerfile to build (relative to the context)
+      default: Dockerfile
+    - name: pathToYamlFile
+      description: The path to the yaml file to deploy within the git source
+      type: string
+    - name: pathToYamlFileTest
+      description: The path to the yaml file to deploy within the git source
+      type: string
+      #value: appli/test_server.tavern.yaml
+    - name: appliUrl
+      description: The path to the yaml file to deploy within the git source
+      type: string
   tasks:
     - name: source-to-image
       taskRef:
         name: build-push-image
       params:
         - name: pathToContext
-          value: "${params.pathToContext}"
+          value: "$(params.pathToContext)"
         - name: pathToDockerFile
-          value: "${params.pathToDockerFile}"
+          value: "$(params.pathToDockerFile)"
       resources:
         inputs:
           - name: git-repo
@@ -40,7 +59,7 @@ spec:
               - source-to-image
       params:
         - name: pathToYamlFile
-          value: "${params.pathToYamlFile}"
+          value: "$(params.pathToYamlFile)"
     - name: test-app
       taskRef:
         name: test-app
@@ -52,6 +71,6 @@ spec:
             resource: git-repo
       params:
         - name: pathToYamlFileTest
-          value: "${params.pathToYamlFileTest}"
+          value: "$(params.pathToYamlFileTest)"
         - name: appliUrl
-          value: "${params.appliUrl}"
+          value: "$(params.appliUrl)"
