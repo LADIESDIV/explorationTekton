@@ -1,9 +1,6 @@
 name: test
 
-workflow "Run gcloud command" {
-  on = "push"
-  resolves = "GCP List Clusters"
-}
+on = "push"
 
 action "GCP Authenticate" {
   uses = "actions/gcloud/auth@master"
