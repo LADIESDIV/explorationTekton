@@ -10,3 +10,4 @@ appli/conftest.py
 appli/log_spec.yaml
 __pycache__
 log_spec.yaml
+.pytest_cache
