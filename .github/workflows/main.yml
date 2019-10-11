@@ -1,0 +1,106 @@
+name: test
+
+workflow "Run gcloud command" {
+  on = "push"
+  resolves = "GCP List Clusters"
+}
+
+action "GCP Authenticate" {
+  uses = "actions/gcloud/auth@master"
+  secrets = ["AUTHGOOGLE"]
+}
+
+action "GCP add iam policy binding admin" {
+  needs = ["GCP Authenticate"]
+  uses = "actions/gcloud/cli@master"
+  args = "projects add-iam-policy-binding grounded-braid-232514 --member serviceAccount:tekton@grounded-braid-232514.iam.gserviceaccount.com --role roles/storage.admin
+"
+}
+
+action "GCP add iam policy binding dev" {
+  needs = ["GCP Authenticate"]
+  uses = "actions/gcloud/cli@master"
+  args = "projects add-iam-policy-binding grounded-braid-232514 --member serviceAccount:tekton@grounded-braid-232514.iam.gserviceaccount.com --role roles/container.developer
+"
+}
+
+action "GCP activ service googleapi" {
+  needs = ["GCP Authenticate"]
+  uses = "actions/gcloud/cli@master"
+  args = "services enable container.googleapis.com
+"
+}
+
+action "GCP activ service googleapi" {
+  needs = ["GCP Authenticate"]
+  uses = "actions/gcloud/cli@master"
+  args = "services enable container.googleapis.com
+"
+}
+
+action "GCP config zone" {
+  needs = ["GCP Authenticate"]
+  uses = "actions/gcloud/cli@master"
+  args = "config set compute/zone europe-west3-a
+"
+}
+
+action "GCP create cluster K8s" {
+  needs = ["GCP Authenticate"]
+  uses = "actions/gcloud/cli@master"
+  args = "container clusters create cluster-tekton --service-account tekton@grounded-braid-232514.iam.gserviceaccount.com --scopes cloud-platform --machine-type n1-standard-2"
+}
+
+action "add tekton in K8s" {
+  needs = ["GCP Authenticate"]
+  uses = "steebchen/kubectl@master"
+  args = "apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml"
+}
+
+action "add dashboard tekton in K8s" {
+  needs = ["GCP Authenticate"]
+  uses = "steebchen/kubectl@master"
+  args = "apply --filename https://github.com/tektoncd/dashboard/releases/download/v0.1.1/release.yaml"
+}
+
+action "create rolebinding in K8s" {
+  needs = ["GCP Authenticate"]
+  uses = "steebchen/kubectl@master"
+  args = "create rolebinding --serviceaccount default:default --clusterrole admin default-admin"
+}
+
+action "create pipelineresource" {
+  needs = ["GCP Authenticate"]
+  uses = "steebchen/kubectl@master"
+  args = "apply -f ./tekton/gitrepo.yml"
+}
+
+action "create taskBPD" {
+  needs = ["GCP Authenticate"]
+  uses = "steebchen/kubectl@master"
+  args = "apply -f ./tekton/taskBPD.yml"
+}
+
+action "create taskDK" {
+  needs = ["GCP Authenticate"]
+  uses = "steebchen/kubectl@master"
+  args = "apply -f ./tekton/taskDK.yml"
+}
+
+action "create tasktest" {
+  needs = ["GCP Authenticate"]
+  uses = "steebchen/kubectl@master"
+  args = "apply -f ./tekton/tasktest.yml"
+}
+
+action "create pipeline" {
+  needs = ["GCP Authenticate"]
+  uses = "steebchen/kubectl@master"
+  args = "apply -f ./tekton/pipeline.yml"
+}
+
+action "create pipelinerun" {
+  needs = ["GCP Authenticate"]
+  uses = "steebchen/kubectl@master"
+  args = "apply -f ./tekton/pipelinerun.yml"
+}
