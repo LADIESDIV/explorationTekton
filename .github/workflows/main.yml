@@ -37,6 +37,7 @@ jobs:
         args: container clusters create cluster-tekton --service-account tekton@grounded-braid-232514.iam.gserviceaccount.com --scopes cloud-platform --machine-type n1-standard-2
   deploytekton:
     name: deploy Tekton on K8s
+    needs: [deploykube]
     runs-on: ubuntu-latest
     steps:
     - name: GCP Authenticate
@@ -57,6 +58,7 @@ jobs:
         args: create rolebinding --serviceaccount default:default --clusterrole admin default-admin
   deployappli:
     name: deploy appli and test it with Tekton
+    needs: [deploykube,deploytekton]
     runs-on: ubuntu-latest
     steps:
     - name: GCP Authenticate
