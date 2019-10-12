@@ -12,15 +12,15 @@ jobs:
       - name: GCP add iam policy binding admin
         uses: actions/gcloud/cli@master
         with:
-          args: projects add-iam-policy-binding grounded-braid-232514 --member serviceAccount:tekton@grounded-braid-232514.iam.gserviceaccount.com --role roles/storage.admin
+          args: projects add-iam-policy-binding isen-234418 --member serviceAccount:tekton@isen-234418.iam.gserviceaccount.com --role roles/storage.admin
       - name: GCP add iam policy binding dev
         uses: actions/gcloud/cli@master
         with:
-          args: projects add-iam-policy-binding grounded-braid-232514 --member serviceAccount:tekton@grounded-braid-232514.iam.gserviceaccount.com --role roles/container.developer
+          args: projects add-iam-policy-binding isen-234418 --member serviceAccount:tekton@isen-234418.iam.gserviceaccount.com --role roles/container.developer
       - name: GCP set project
         uses: actions/gcloud/cli@master
         with:
-          args: config set project grounded-braid-232514
+          args: config set project isen-234418
       - name: GCP activ service googleapi
         uses: actions/gcloud/cli@master
         with:
@@ -32,7 +32,7 @@ jobs:
       - name: GCP create cluster K8s
         uses: actions/gcloud/cli@master
         with:
-          args: container clusters create cluster-tekton --service-account tekton@grounded-braid-232514.iam.gserviceaccount.com --scopes cloud-platform --machine-type n1-standard-2
+          args: container clusters create cluster-tekton --service-account tekton@isen-234418.iam.gserviceaccount.com --scopes cloud-platform --machine-type n1-standard-2
   deploytekton:
     name: deploy Tekton on K8s
     needs: [deploykube]
