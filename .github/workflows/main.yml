@@ -7,8 +7,6 @@ jobs:
     steps:
     - name: GCP Authenticate
       uses: actions/gcloud/auth@master
-      with: 
-        super_secret: ${{ secrets.GCLOUD_AUTH }}
       env: 
         super_secret: ${{ secrets.GCLOUD_AUTH }}
     - name: GCP add iam policy binding admin
@@ -63,7 +61,7 @@ jobs:
     steps:
     - name: GCP Authenticate
       uses: actions/gcloud/auth@master  
-      with: 
+      env: 
         super_secret: ${{ secrets.GCLOUD_AUTH }}
     - name: create pipelineresource
       uses: steebchen/kubectl@master
