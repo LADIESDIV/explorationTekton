@@ -8,9 +8,9 @@ jobs:
     - name: GCP Authenticate
       uses: actions/gcloud/auth@master
       with: 
-        super_secret: ${{ secrets.AUTHGOOGLE }}
+        super_secret: ${{ secrets.GCLOUD_AUTH }}
       env: 
-        super_secret: ${{ secrets.AUTHGOOGLE }}
+        super_secret: ${{ secrets.GCLOUD_AUTH }}
     - name: GCP add iam policy binding admin
       uses: actions/gcloud/cli@master
       with:
@@ -43,7 +43,7 @@ jobs:
     - name: GCP Authenticate
       uses: actions/gcloud/auth@master
       env: 
-        super_secret: ${{ secrets.AUTHGOOGLE }}
+        super_secret: ${{ secrets.GCLOUD_AUTH }}
     - name: add tekton in K8s
       uses: steebchen/kubectl@master
       with:
@@ -62,9 +62,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: GCP Authenticate
-      uses: actions/gcloud/auth@master
+      uses: actions/gcloud/auth@master  
       with: 
-        super_secret: ${{ secrets.AUTHGOOGLE }}
+        super_secret: ${{ secrets.GCLOUD_AUTH }}
     - name: create pipelineresource
       uses: steebchen/kubectl@master
       with:
