@@ -54,6 +54,9 @@ jobs:
       #   with:
       #     args: kubectl config view | base64 > /tmp/kube
       # - run: export toto=$(cat /tmp/kube)
+      - run: mkdir -p $HOME/.kube
+      - run: cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+      - run: chown $(id -u):$(id -g) $HOME/.kube/config
       - name: add tekton in K8s
         # uses: steebchen/kubectl@master
         # with:
