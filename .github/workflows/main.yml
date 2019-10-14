@@ -33,17 +33,32 @@ jobs:
         uses: actions/gcloud/cli@master
         with:
           args: container clusters create cluster-tekton --service-account tekton@grounded-braid-232514.iam.gserviceaccount.com --scopes cloud-platform --machine-type n1-standard-2
+      - name: GCP install K8s cli
+        uses: actions/gcloud/cli@master
+        with:
+          args: components install kubectl
   deploytekton:
     name: deploy Tekton on K8s
     needs: [deploykube]
     runs-on: ubuntu-latest
     steps:
-      - name: add tekton in K8s
-        uses: steebchen/kubectl@master
+      - name: GCP Authenticate
+        uses: actions/gcloud/auth@master
         env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          args: apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml
+          GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+      # - uses: actions/upload-artifact@master
+      #   with:
+      #     name: config-kube
+      #     path: /tmp/kube
+      # - name: Get config K8s
+      #   with:
+      #     args: kubectl config view | base64 > /tmp/kube
+      # - run: export toto=$(cat /tmp/kube)
+      - name: add tekton in K8s
+        # uses: steebchen/kubectl@master
+        # with:
+        #   args: apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml
+        run: kubectl apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml
       - name: add dashboard tekton in K8s
         uses: steebchen/kubectl@master
         env:
