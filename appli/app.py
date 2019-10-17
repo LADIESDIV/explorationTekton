@@ -15,7 +15,7 @@ class BodyListBeer:
 
 listBeer=[]
 listBeer.append(BodyListBeer("Paix Dieux", "triple", 2).getBody())
-listBeer.append(BodyListBeer("Chimay", "bleu", 1).getBody())
+listBeer.append(BodyListBeer("Chimay", "triple", 1).getBody())
 
 @app.route("/list", methods=["GET"])
 def choose_beer():
