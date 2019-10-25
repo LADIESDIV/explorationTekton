@@ -5,22 +5,22 @@ jobs:
     name: deploy cluster K8s on GCP
     runs-on: ubuntu-latest
     steps:
-      - name: GCP Authenticate
+      - name: GCP Authenticate test
         uses: actions/gcloud/auth@master
         env:
           GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
       - name: GCP add iam policy binding admin
         uses: actions/gcloud/cli@master
         with:
-          args: projects add-iam-policy-binding grounded-braid-232514 --member serviceAccount:tekton@grounded-braid-232514.iam.gserviceaccount.com --role roles/storage.admin
+          args: projects add-iam-policy-binding testproject-255715 --member serviceAccount:tekton@testproject-255715.iam.gserviceaccount.com --role roles/storage.admin
       - name: GCP add iam policy binding dev
         uses: actions/gcloud/cli@master
         with:
-          args: projects add-iam-policy-binding grounded-braid-232514 --member serviceAccount:tekton@grounded-braid-232514.iam.gserviceaccount.com --role roles/container.developer
+          args: projects add-iam-policy-binding testproject-255715 --member serviceAccount:tektontest@testproject-255715.iam.gserviceaccount.com --role roles/container.developer
       - name: GCP set project
         uses: actions/gcloud/cli@master
         with:
-          args: config set project grounded-braid-232514
+          args: config set project testproject-255715
       - name: GCP activ service googleapi
         uses: actions/gcloud/cli@master
         with:
