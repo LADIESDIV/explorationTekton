@@ -1,3 +1,3 @@
 Test TEKTON.
 
-Use githib action to deploy appli and tekton to kube engine.
+Use github action to deploy appli and tekton to kube engine.
